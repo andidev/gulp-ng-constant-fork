@@ -1,18 +1,18 @@
-gulp-ng-constant
+gulp-ng-constant-fork
 ================
 
-[![Build Status](https://travis-ci.org/guzart/gulp-ng-constant.svg)](https://travis-ci.org/guzart/gulp-ng-constant)
+[![Build Status](https://travis-ci.org/andidev/gulp-ng-constant-fork.svg)](https://travis-ci.org/andidev/gulp-ng-constant-fork.svg)
 
 ## Information
 
 <table>
 <tr>
-<td>Package</td><td>gulp-ng-constant</td>
+<td>Package</td><td>gulp-ng-constant-fork</td>
 </tr>
 <tr>
 <td>Description</td>
-<td>Plugin for dynamic generation of angular constant modules.<br>
-Based of <a href="https://github.com/werk85/grunt-ng-constant">grunt-ng-constant</a></td>
+<td>Plugin for dynamic generation of angular constant modules. Forked version of <a href="https://github.com/guzart/gulp-ng-constant">guzart/gulp-ng-constant</a> with extra options.<br>
+Based of <a href="https://github.com/werk85/grunt-ng-constant">grunt-ng-constant</a>.</td>
 </tr>
 <tr>
 <td>Node Version</td>
@@ -22,11 +22,37 @@ Based of <a href="https://github.com/werk85/grunt-ng-constant">grunt-ng-constant
 
 ## Usage
 
+This plugin is a fork of [guzarts plugin gulp-ng-constant](https://github.com/guzart/gulp-ng-constant) so credits to him. Use this in the same way as the original plugin. This plugin was created to solve the [deps false issue](https://github.com/guzart/gulp-ng-constant/issues/11) and the problem that the [plugin cannot be called without referencing a config.json file](https://github.com/guzart/gulp-ng-constant/pull/9).
+
 ### configuration in `gulpfile.js`
 
 _**gulpfile.js**_
 
-    var ngConstant = require('gulp-ng-constant');
+    var ngConstant = require('gulp-ng-constant-fork');
+
+    gulp.task('config', function () {
+        ngConstant({
+            dest: 'app.config.js',
+            name: 'my.module.config',
+            noFile: true,
+            deps: false,
+            constants: { ENV: 'dev!' }
+        })
+        // Writes app.config.js to dist/ folder
+        .pipe(gulp.dest('dist'));
+    });
+
+_**dist/app.config.js**_ _(output)_
+
+    angular.module("my.module.config")
+    .constant("ENV", "dev");
+
+
+### configuration in `gulpfile.js`
+
+_**gulpfile.js**_
+
+    var ngConstant = require('gulp-ng-constant-fork');
 
     gulp.task('config', function () {
       gulp.src('app/config.json')
@@ -60,7 +86,7 @@ _**dist/config.js**_ _(output)_
 
 _**gulpfile.js**_
 
-    var ngConstant = require('gulp-ng-constant');
+    var ngConstant = require('gulp-ng-constant-fork');
 
     gulp.task('config', function () {
       gulp.src('app/config.json')
@@ -103,10 +129,10 @@ This property will override any `name` property defined in the input `json` file
 #### options.dest
 
 Type: `string`  
-Default: `undefined`
+Default: `src file name or constant if noFile is true`  
 _optional_
 
-The path where the generated constant module should be saved.
+The path where the generated constant module should be saved. Use to change output filename.
 
 #### options.constants
 
@@ -122,13 +148,25 @@ input `json` file.
 
 #### options.deps
 
-Type: `array<string>`  
+Type: `array<string>|boolean`  
 Default: `[]`  
 Overrides: `json.deps`  
 _optional_
 
-An array that specifies the default dependencies a module should have.
+An array that specifies the default dependencies a module should have. When your
+module should not have any modules, so you can append the constants to an
+already existing one, you can set deps to false.
 This property will override any `deps` property defined in the input `json` file.
+
+#### options.noFile
+
+Type: `boolean`  
+Default: `false`  
+_optional_
+
+Boolean that tells if the configuration should not be read from a src file.
+Set this to true if the plugin is not called inside a pipe and the configuration
+is not loaded from a file.
 
 #### options.wrap
 
@@ -155,7 +193,7 @@ A string that defines how the JSON.stringify method will prettify your code.
 #### options.template
 
 Type: `string`  
-Default: _content of [tpls/constant.tpl.ejs](https://github.com/guzart/gulp-ng-constant/blob/master/tpls/constant.tpl.ejs)_  
+Default: _content of [tpls/constant.tpl.ejs](https://github.com/andidev/gulp-ng-constant-fork/blob/master/tpls/constant.tpl.ejs)_  
 _optional_
 
 EJS template to apply when creating the output configuration file. The following variables

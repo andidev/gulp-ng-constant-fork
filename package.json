@@ -1,11 +1,11 @@
 {
-  "name": "gulp-ng-constant",
-  "version": "0.2.0",
-  "description": "Gulp plugin for dynamic generation of angular constant modules.",
+  "name": "gulp-ng-constant-fork",
+  "version": "0.3.0",
+  "description": "Gulp plugin for dynamic generation of angular constant modules. Forked version of https://github.com/guzart/gulp-ng-constant with extra options.",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/guzart/gulp-ng-constant.git"
+    "url": "git://github.com/andidev/gulp-ng-constant-fork.git"
   },
   "keywords": [
     "gulp",
@@ -13,21 +13,21 @@
     "constant",
     "gulpplugin"
   ],
-  "author": "Arturo Guzman",
+  "author": "Anders Steiner",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/guzart/gulp-ng-constant/issues"
+    "url": "https://github.com/andidev/gulp-ng-constant-fork/issues"
   },
-  "homepage": "https://github.com/guzart/gulp-ng-constant",
+  "homepage": "https://github.com/andidev/gulp-ng-constant-fork",
   "scripts": {
     "test": "node_modules/jasmine-node/bin/jasmine-node spec/gulpNgConstantSpec.js"
   },
   "dependencies": {
-    "lodash": "^2.4.1",
-    "gulp-util": "^2.2.14",
-    "through2": "^0.4.1"
+    "lodash": "2.4.1",
+    "gulp-util": "2.2.20",
+    "through2": "0.6.3"
   },
   "devDependencies": {
-    "jasmine-node": "^1.14.5"
+    "jasmine-node": "1.14.5"
   }
 }
