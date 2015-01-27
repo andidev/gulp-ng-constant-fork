@@ -19,7 +19,8 @@ var defaults = {
     wrap: false,
     template: undefined,
     templatePath: TEMPLATE_PATH,
-    noFile: false
+    noFile: false,
+    interpolate: undefined
 };
 
 function ngConstantPlugin(opts) {
@@ -47,8 +48,7 @@ function ngConstantPlugin(opts) {
         try {
             var data = file.isNull() ? {} : JSON.parse(file.contents);
 
-            // Create the module string
-            var result = _.template(template, {
+            var result = _.template(template)({
                 moduleName: options.name || data.name,
                 deps:       isDepsFalse(options, data) ? false : options.deps || data.deps || [],
                 constants:  getConstants(data, options)
@@ -56,13 +56,13 @@ function ngConstantPlugin(opts) {
 
             // Handle wrapping
             if (!options.wrap) { options.wrap = data.wrap; }
-            result = wrap(result, options);
+            result = wrap(result, options)(_.merge({ '__ngModule': result }, options));
             file.path = getFilePath(file.path, options);
             file.contents = new Buffer(result);
             _this.push(file);
         } catch (err) {
             err.fileName = file.path;
-            _this.emit('error', pluginError(err));
+            _this.emit('error', pluginError(err.stack));
         }
 
         cb();
@@ -111,7 +111,7 @@ function wrap(input, options) {
         if (!commonjsWrapper) { commonjsWrapper = readFile(COMMONJS_WRAP_PATH); }
         wrapper = commonjsWrapper;
     }
-    return _.template(wrapper, _.merge({ '__ngModule': input }, options));
+    return _.template(wrapper, options.interpolate ? { interpolate: options.interpolate } : {});
 }
 
 function readFile(filepath) {
