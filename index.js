@@ -90,9 +90,15 @@ function getConstants(data, options) {
 function getFilePath(filePath, options) {
     if (!options.dest) {
         return gutil.replaceExtension(filePath, '.js');
+    } else {
+        var parent;
+        if (options.noFile) {
+            parent = process.env.PWD;
+        } else {
+            parent = path.dirname(filePath);
+        }
+        return path.join(parent, options.dest);
     }
-
-    return path.join(path.dirname(filePath), options.dest);
 }
 
 function pluginError(msg) {
