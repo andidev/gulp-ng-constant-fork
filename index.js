@@ -30,7 +30,7 @@ function ngConstantPlugin(opts) {
     var stream = through.obj(objectStream);
 
     if (options.noFile) {
-        stream.end(new gutil.File({ path: options.dest | 'constants.js' }));
+        stream.end(new gutil.File({ path: options.dest || 'constants.js' }));
     }
 
     return stream;
